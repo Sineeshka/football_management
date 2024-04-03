@@ -1,6 +1,11 @@
-# sample
+# football management app
 
 A new Flutter project.
+
+# ER Diagram
+
+[Uploading ERdiagram.drawio…<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/></root></mxGraphModel>]()
+
 
 ## Getting Started
 
