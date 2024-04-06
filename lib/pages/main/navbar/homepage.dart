@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sample/pages/main/navbar/add.dart';
 import 'package:sample/pages/main/navbar/home.dart';
 import 'package:sample/pages/main/navbar/profile/profile.dart';
+import 'package:sample/pages/main/navbar/profile/list1.dart';
 import 'package:sample/pages/main/navbar/search.dart';
 class homepage extends StatefulWidget {
   const homepage({super.key});
@@ -45,10 +47,32 @@ class _homepageState extends State<homepage> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
-          BottomNavigationBarItem(icon: new Icon(Icons.home_outlined,color: Colors.black,), label: 'home',),
-          BottomNavigationBarItem(icon: new Icon(Icons.search_outlined,color: Colors.black,), label: 'search'),
-          BottomNavigationBarItem(icon: new Icon(Icons.add,color: Colors.black,), label: 'add'),
-          BottomNavigationBarItem(icon: new Icon(Icons.person_outline,color: Colors.black,), label: 'profile')
+          BottomNavigationBarItem(icon: Column(
+            children: [
+              new Icon(Icons.home_outlined,color: Colors.black,),
+              Text('Home')
+            ],
+          ), label: 'home',),
+          BottomNavigationBarItem(icon: Column(
+            children: [
+              new Icon(Icons.search,color: Colors.black,),
+              Text('Search')
+            ],
+          ), label: 'search',),
+          BottomNavigationBarItem(icon: Column(
+            children: [
+              new Icon(Icons.add,color: Colors.black,),
+              Text('Add')
+            ],
+          ), label: 'add',),
+          BottomNavigationBarItem(icon: Column(
+            children: [
+              GestureDetector(
+                //onTap: fetchCurrentUserInformation,
+                child: new Icon(Icons.person,color: Colors.black,)),
+              Text('Profile')
+            ],
+          ), label: 'Profile',),
         ],
       ),
       body: _children[_currentIndex],

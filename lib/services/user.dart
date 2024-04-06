@@ -7,6 +7,8 @@ import 'package:sample/models/user.dart';
  import 'package:sample/services/utils.dart';
 
 class UserService {
+  final CollectionReference events = FirebaseFirestore.instance.collection('users');
+  
  // UtilsService _utilsService = UtilsService();
 
   // List<UserModel> _userListFromQuerySnapshot(QuerySnapshot snapshot) {

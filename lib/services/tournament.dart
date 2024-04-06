@@ -8,7 +8,7 @@ class TournamentService {
   return snapshot.docs.map((DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
     return TournamentModel(
-      primary: data['id'],
+      primary: data['primary'],
       createBy: data['createBy'],
       description: data['description'],
       location: data['location'] ?? 0,
@@ -45,7 +45,7 @@ final CollectionReference events = FirebaseFirestore.instance.collection('events
 Stream<List<TournamentModel>> getTournamentsByUser(uid) {
     return FirebaseFirestore.instance
         .collection("events")
-        .where('id', isEqualTo: uid)
+        .where('primary', isEqualTo: uid)
         .snapshots()
         .map(_tournamentListFromSnapshot);
   }
