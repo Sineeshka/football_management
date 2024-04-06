@@ -35,6 +35,15 @@ class AuthService{
     }
   }
 
+  Future signOut() async{
+    try{
+      return await auth.signOut();
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+
   Future signIn(email, password) async {
     try {
       User user = (await auth.signInWithEmailAndPassword(

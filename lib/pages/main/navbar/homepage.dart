@@ -7,6 +7,7 @@ import 'package:sample/pages/main/navbar/home.dart';
 import 'package:sample/pages/main/navbar/profile/profile.dart';
 import 'package:sample/pages/main/navbar/profile/list1.dart';
 import 'package:sample/pages/main/navbar/search.dart';
+import 'package:sample/services/auth.dart';
 class homepage extends StatefulWidget {
   const homepage({super.key});
 
@@ -24,10 +25,15 @@ class _homepageState extends State<homepage> {
   }
   @override
   Widget build(BuildContext context) {
+    final AuthService _authService=AuthService();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        //title: Text("Home"),
+        actions:<Widget> [
+          ElevatedButton( 
+            onPressed:() async {_authService.signOut();}, 
+            child: Text('Signout'),)
+        ],
         title: Text(
             'FOOTBALL360\'',
             style: GoogleFonts.poppins(
