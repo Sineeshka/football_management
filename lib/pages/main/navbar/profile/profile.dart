@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:sample/pages/main/navbar/profile/list.dart';
 import 'package:sample/pages/main/navbar/profile/list1.dart';
+import 'package:sample/pages/main/navbar/profile/list2.dart';
 import 'package:sample/services/posts.dart';
 import 'package:sample/services/tournament.dart';
 
@@ -20,16 +21,20 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   //PostService _postService = PostService();
   //TournamentService _tournamentService = TournamentService();
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  //final Listteam list1 = Listteam();
+  //final Listtournament list2 = Listtournament();
+   
+  
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-   
+   //roshan = widget2;
     // Retrieving screen width and height
     double screenWidth = screenSize.width;
     double screenHeight = screenSize.height;
+    
     return Column(
       children: [
         UserProfile(),
@@ -51,6 +56,7 @@ class _ProfileState extends State<Profile> {
               ),
               width: screenWidth/2,
               child: TextButton(onPressed: (){
+               
               }, child: Text('Teams')),
             ),
             Container(
@@ -67,7 +73,7 @@ class _ProfileState extends State<Profile> {
             )
           ],
         ),
-        Expanded(child: Listtournament()),
+        Expanded(child: Listteam())
       ],
     );
   }

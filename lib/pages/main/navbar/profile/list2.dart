@@ -5,28 +5,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-//import 'package:sample/services/tournament.dart';
+//import 'package:sample/services/team.dart';
 
-class Listtournament extends StatefulWidget {
+class Listteam extends StatefulWidget {
   
-  const Listtournament({super.key});
+  const Listteam({super.key});
 
   @override
-  State<Listtournament> createState() => _ListtournamentState();
+  State<Listteam> createState() => _ListteamState();
 }
 
-class _ListtournamentState extends State<Listtournament> {
+class _ListteamState extends State<Listteam> {
   
-  //final TournamentService tournamentService = TournamentService();
+  //final teamService teamService = teamService();
   final String uid = FirebaseAuth.instance.currentUser!.uid;
-  final CollectionReference events = FirebaseFirestore.instance.collection('events');
+  final CollectionReference events = FirebaseFirestore.instance.collection('Teams');
 
   
   
-  //final DocumentSnapshot tournament = snapshot.data.docs[index];
+  //final DocumentSnapshot team = snapshot.data.docs[index];
   @override
   Widget build(BuildContext context) {
-    //Stream<List<TournamentModel>> posts = tournamentService.getTournamentsByUser(uid);
+    //Stream<List<teamModel>> posts = teamService.getteamsByUser(uid);
     
     Size screenSize = MediaQuery.of(context).size;
 
@@ -73,24 +73,24 @@ class _ListtournamentState extends State<Listtournament> {
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
                               
-                              eventsSnap['description'],style: TextStyle(
+                              eventsSnap['decsription'],style: TextStyle(
                               fontSize: 12,fontWeight: FontWeight.bold  ),
                               overflow: TextOverflow.clip,
                                                 
                             ),
                           ),
+                          // Text(
+                          //   eventsSnap['datetime'].toString(),style: TextStyle(
+                          //   fontSize: 12,fontWeight: FontWeight.normal  ),
+                                          
+                          // ),
                           Text(
-                            eventsSnap['location'],style: TextStyle(
+                            eventsSnap['primary'],style: TextStyle(
                             fontSize: 12,fontWeight: FontWeight.normal  ),
                                           
                           ),
                           Text(
-                            eventsSnap['datetime'].toString(),style: TextStyle(
-                            fontSize: 12,fontWeight: FontWeight.normal  ),
-                                          
-                          ),
-                          Text(
-                            eventsSnap['primary'].toString(),style: TextStyle(
+                            eventsSnap['createby'],style: TextStyle(
                             fontSize: 12,fontWeight: FontWeight.normal  ),
                                           
                           ),

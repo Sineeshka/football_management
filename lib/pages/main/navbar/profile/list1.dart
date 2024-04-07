@@ -13,22 +13,35 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
-  
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+    final String uid = FirebaseAuth.instance.currentUser!.uid;
+
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     User? user = _auth.currentUser;
-    String username = "";
-    String email = "";
-    
+    String username ='';
+    String email;
+    //_fetch();
     double screenWidth = screenSize.width;
     double screenHeight = screenSize.height;
     
   
-    return GestureDetector(
-      onTap: (){},
-      child: Container(
+    return FutureBuilder<DocumentSnapshot>(
+          future: users.doc(uid).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+              return Container(
+        height: screenHeight/3.2,
+        width: screenWidth,
         child: Column(
           children: [
             Row(
@@ -57,7 +70,7 @@ class _UserProfileState extends State<UserProfile> {
                       height: screenHeight/12.8,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Center(child: Text(username)),
+                        child: Center(child: Text(data["name"])),
                       ),),
                       Container(
                       decoration: BoxDecoration(
@@ -70,7 +83,7 @@ class _UserProfileState extends State<UserProfile> {
                       height: screenHeight/12.8,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Center(child: Text('BirthDate')),
+                        child: Center(child: Text(data["birthdate"].toString())),
                       ),)
                   ],
                 )
@@ -84,18 +97,37 @@ class _UserProfileState extends State<UserProfile> {
                   //crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Achievement"),
-                    Text("Achievement"),
-                    Text("Achievement"),
+                    Text(data["achievement1"]),
+                    Text(data["achievement2"]),
+                    Text(data["achievement3"]),
                   ],
                 ),
               ),
             )
           ],
         ),
-        height: screenHeight/3.2,
-        width: screenWidth,
-      ),
-    );
+      );
+        }   
+        return Text("loading");
+
+          },
+        );
+      
     }
+  //    _fetch() async {
+  //   final firebaseUser = await FirebaseAuth.instance.currentUser!;
+  //   if (firebaseUser != null){
+  //     await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .document(firebaseUser.uid)
+  //         .get()
+  //         .then((ds) {
+  //           var username = ds.data['name'];
+  //           var myEmail = ds.data['email'];
+  //       print(myEmail);
+  //     }).catchError((e) {
+  //       print(e);
+  //     });
+  //   }
+  // }
 }
