@@ -12,7 +12,7 @@ class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Color.fromARGB(255,230, 220, 221),
     );
     
   }
