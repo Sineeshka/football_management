@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sample/pages/main/createTeam.dart';
 import 'package:sample/pages/main/tournament_reg.dart';
 import 'package:sample/services/posts.dart';
 import 'package:sample/services/tournament.dart';
@@ -31,10 +32,13 @@ class _AddState extends State<Add> {
                     ElevatedButton(
                   //textColor: Colors.white,
                   onPressed: () async {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AddTeamPage()));
                    // _TournamentService.savePost(text);
                     //Navigator.pop(context);
                   },
-                  child: Text('create team'))],
+                  child: Text('create team'),
+                  )
+                  ],
                     
               ),
             )

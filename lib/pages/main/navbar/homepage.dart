@@ -85,7 +85,7 @@ class _homepageState extends State<homepage> {
             // Navigate to TournamentDetailScreen
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PageTeam()),
+              MaterialPageRoute(builder: (context) => PageTournament()),
             );
           },
           child: Icon(Icons.sports_soccer_outlined,color: Color.fromARGB(255,230, 220, 221),),

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sample/models/user.dart';
+import 'package:sample/pages/main/createTeam.dart';
 import 'package:sample/pages/main/navbar/homepage.dart';
 import 'package:sample/pages/main/navbar/add.dart';
 import 'package:sample/pages/main/tournament_reg.dart';
-import 'package:sample/pages/signup.dart';
+import 'package:sample/pages/register.dart';
+import 'package:sample/pages/register.dart';
+import 'package:sample/pages/first.dart';
+import 'package:sample/pages/signin.dart';
 
 
 class Wrapper extends StatelessWidget {
@@ -15,7 +19,8 @@ class Wrapper extends StatelessWidget {
     final user =Provider.of<UserModel?>(context);
 
     if(user ==null){
-      return SignUp();
+      return Login_Screen();
+      //SignUp();
     }
 
     return MaterialApp(
@@ -24,6 +29,7 @@ class Wrapper extends StatelessWidget {
         '/':(context) => homepage(),
         '/add': (context) => Add(),
         '/tournament':(context) => CreateEventPage(),
+        '/addteam':(context) => AddTeamPage(),
         // '/profile': (context) => Profile(),
         // '/edit': (context) => Edit(),
         // '/replies': (context) => Replies()

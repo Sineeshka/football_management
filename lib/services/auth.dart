@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sample/models/user.dart';
@@ -14,7 +15,7 @@ class AuthService{
     return auth.authStateChanges().map(_userFromFirebaseUser);
   }
 
-  Future signUp(email, password) async {
+  Future register(name,email,password,dob) async {
     try {
       UserCredential user = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -22,7 +23,7 @@ class AuthService{
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.user!.uid)
-          .set({'name': email, 'email': email});
+          .set({'name': name, 'email': email,'Birthdate':dob});
       _userFromFirebaseUser(user.user);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
