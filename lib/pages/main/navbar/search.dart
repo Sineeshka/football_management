@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sample/pages/pageForTeam.dart';
+import 'package:sample/pages/pageForTournament.dart';
+import 'package:sample/pages/playerProfile.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -14,107 +12,109 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final CollectionReference player =
-      FirebaseFirestore.instance.collection('users');
-
   String name = '';
+
+  final _searchController = TextEditingController();
+  List<Map> searchResults = [];
+
+  @override
+  void dispose() {
+    _searchController
+        .dispose(); // Dispose of the controller to avoid memory leaks
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void getTeamsAndPlayers(String searchText) async {
+    List<Map> teams = [];
+    List<Map> players = [];
+    List<Map> tournaments = [];
+
+    await FirebaseFirestore.instance
+        .collection('Teams')
+        .where('name'.toLowerCase(), isEqualTo: searchText.toLowerCase())
+        .get()
+        .then((teamSnapshot) {
+      for (var team in teamSnapshot.docs) {
+        teams.add(team.data());
+      }
+    });
+
+    await FirebaseFirestore.instance
+        .collection('events')
+        .where('name'.toLowerCase(), isEqualTo: searchText.toLowerCase())
+        .get()
+        .then((tournamentSnapshot) {
+      for (var tournament in tournamentSnapshot.docs) {
+        tournaments.add(tournament.data());
+      }
+    });
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .where('name'.toLowerCase(), isEqualTo: searchText.toLowerCase())
+        .get()
+        .then((playerSnapshot) {
+      for (var player in playerSnapshot.docs) {
+        players.add(player.data());
+      }
+    });
+
+    List<Map> combined = [...teams, ...players, ...tournaments];
+    setState(() {
+      searchResults = combined;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-
-    // Retrieving screen width and height
-    double screenWidth = screenSize.width;
-    double screenHeight = screenSize.height;
-    return Container(
-      child:Column(
-        children: [Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: 55,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(),
-            ),
-            child: TextField(
-              style: GoogleFonts.epilogue(fontSize: 16, fontWeight: FontWeight.normal,color:Color.fromARGB(255,101,75,78),),
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.search), hintText: 'Search..'),
-              onChanged: (value) {
-                setState(() {
-                  name = value;
-                });
-              },
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 12, 105, 181),
+        title: Card(
+          child: TextField(
+            decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.search), hintText: 'Search'),
+            onChanged: (value) {
+              getTeamsAndPlayers(value);
+            },
           ),
         ),
-        SingleChildScrollView(
-          child: Container(
-            height: screenHeight-210,
-            width: screenWidth-10,
-            child: StreamBuilder(
-            stream: player.orderBy('name').snapshots(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var playerSnap =
-                        snapshot.data!.docs[index].data() as Map<String, dynamic>;
-            
-                    return !playerSnap['name']
-                                .toString()
-                                .toLowerCase()
-                                .contains(name.toLowerCase()) &&
-                            name.isNotEmpty
-                        ? const SizedBox.shrink()
-                        : Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Container(
-                              height: 90,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Color.fromARGB(255,101,75,78),
-                                    width: 1,
-                                ),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Color.fromARGB(255,230, 220, 221),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        color: Color.fromARGB(255, 209, 208, 208),
-                                        blurRadius: 10,
-                                        spreadRadius: 15),
-                                  ]),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '  ' + playerSnap['name'],
-                                       style: GoogleFonts.epilogue(fontSize: 18, fontWeight: FontWeight.bold,color:Color.fromARGB(255,101,75,78),),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      
-                                      Icon(Icons.arrow_forward_ios,color: Color.fromARGB(255,101,75,78),),
-                                      SizedBox(width: 18,),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                  },
-                );
+      ),
+      body: ListView.builder(
+        itemCount: searchResults.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(searchResults[index]['name']),
+            onTap: () {
+              if (searchResults[index]['type'] == 'player') {
+                // Assuming a 'type' field differentiates teams and players
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => playerProfile(
+                            searchResults: searchResults, index: index)));
+              } else if (searchResults[index]['type'] == 'tournament') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PageTournament(
+                            searchResults: searchResults, index: index)));
+              } else if (searchResults[index]['type'] == 'team') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PageTeam(
+                            searchResults: searchResults, index: index)));
               }
-              return Container();
             },
-                  ),
-          ),
-        ),],
-      )
+          );
+        },
+      ),
     );
   }
 }

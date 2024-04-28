@@ -83,10 +83,10 @@ class _homepageState extends State<homepage> {
       body: _children[_currentIndex],
       floatingActionButton: FloatingActionButton(onPressed: () {
             // Navigate to TournamentDetailScreen
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PageTournament()),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => PageTournament()),
+            // );
           },
           child: Icon(Icons.sports_soccer_outlined,color: Color.fromARGB(255,230, 220, 221),),
           backgroundColor: Color.fromARGB(255,101,75,78),),
