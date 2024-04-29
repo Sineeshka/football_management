@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sample/pages/main/navbar/add.dart';
 import 'package:sample/pages/main/navbar/home.dart';
+import 'package:sample/pages/main/navbar/notifiacation.dart';
 import 'package:sample/pages/main/navbar/profile/profile.dart';
 import 'package:sample/pages/main/navbar/profile/list1.dart';
 import 'package:sample/pages/main/navbar/search.dart';
@@ -18,7 +20,7 @@ class homepage extends StatefulWidget {
 }
 
 class _homepageState extends State<homepage> {
-  final List<Widget> _children = [home(),Search(),Add(),Profile()];
+  final List<Widget> _children = [home(),Search(),Add(),UserDataScreen()];
   int _currentIndex = 0;
   void onTabPressed(int index) {
     setState(() {
@@ -33,13 +35,28 @@ class _homepageState extends State<homepage> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255,101,75,78),
         actions:<Widget> [
-          ElevatedButton( 
-            onPressed:() async {_authService.signOut();}, 
-            child: Text('Signout'),)
+          GestureDetector(
+            onTap: () async {_authService.signOut();},
+            child: Padding(
+            padding: const EdgeInsets.fromLTRB(0,0,10,0),
+            child: Container(
+              child: Center(
+                child: Text('Sign Out',style: GoogleFonts.epilogue(
+                  fontSize: 12, fontWeight: FontWeight.normal, color: Colors.white),),
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color:  Colors.black
+              ),
+              height: 35,
+              width: 80,
+              //color: Color.fromARGB(255,230, 220, 221),
+            ),
+          )),
         ],
         title: Text(
             'FOOTBALL360\'',
-             style: GoogleFonts.epilogue(fontSize: 24, fontWeight: FontWeight.normal,color:Colors.white,),
+             style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.normal,color:Colors.white,),
             ),
           ),
 
@@ -82,13 +99,13 @@ class _homepageState extends State<homepage> {
       ),
       body: _children[_currentIndex],
       floatingActionButton: FloatingActionButton(onPressed: () {
-            // Navigate to TournamentDetailScreen
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => PageTournament()),
-            // );
+            //Navigate to TournamentDetailScreen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Noti()),
+            );
           },
-          child: Icon(Icons.sports_soccer_outlined,color: Color.fromARGB(255,230, 220, 221),),
+          child: Icon(Icons.notifications,color: Color.fromARGB(255,230, 220, 221),),
           backgroundColor: Color.fromARGB(255,101,75,78),),
     );
   }

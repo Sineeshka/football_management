@@ -1,81 +1,98 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
-import 'package:sample/pages/main/navbar/profile/list.dart';
-import 'package:sample/pages/main/navbar/profile/list1.dart';
-import 'package:sample/pages/main/navbar/profile/list2.dart';
-import 'package:sample/services/posts.dart';
-import 'package:sample/services/tournament.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
-
+class UserDataScreen extends StatefulWidget {
   @override
-  State<Profile> createState() => _ProfileState();
+  _UserDataScreenState createState() => _UserDataScreenState();
 }
 
-class _ProfileState extends State<Profile> {
-  //PostService _postService = PostService();
-  //TournamentService _tournamentService = TournamentService();
-
-  //final Listteam list1 = Listteam();
-  //final Listtournament list2 = Listtournament();
-   
+class _UserDataScreenState extends State<UserDataScreen> {
+  String userId = FirebaseAuth.instance.currentUser!.uid;// Specify the user ID here
   
-
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-   //roshan = widget2;
-    // Retrieving screen width and height
-    double screenWidth = screenSize.width;
-    double screenHeight = screenSize.height;
-    
-    return Column(
-      children: [
-        UserProfile(),
-        Container(
-          height: 1,
-          color: Colors.black,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-
-            Container(
-              //padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1,
-                  color: Colors.black
-                )
-              ),
-              width: screenWidth/2,
-              child: TextButton(onPressed: (){
-               
-              }, child: Text('Teams')),
+    final Size screenSize = MediaQuery.of(context).size;
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: FutureBuilder<Map<String, dynamic>>(
+          future: getUserData(userId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+        return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+        return Text('Error: ${snapshot.error}');
+            } else {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+              color: Color.fromARGB(255, 101, 75, 78),
             ),
-            Container(
-              //padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1,
-                  color: Colors.black
-                )
-              ),
-              width: screenWidth/2,
-              child: TextButton(onPressed: (){
-              }, child: Text('Tournaments')),
-            )
-          ],
+          ),
+          //alignment: Alignment.topRight,
+          height: 100,
+          width: screenSize.width-20,
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                userDataWidget('Name', snapshot.data?['name'] ?? ''),
+                userDataWidget('Email', snapshot.data?['email'] ?? ''),
+                // Add more userDataWidget as needed for other fields
+                
+              ],
+            ),
+          ),
+        );
+            }
+          },
+        )
+        
         ),
-        Expanded(child: Listteam())
-      ],
+      ),
     );
   }
-  
+
+  Future<Map<String, dynamic>> getUserData(String id) async {
+  try {
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(id)
+        .get();
+    if (documentSnapshot.exists) {
+      return documentSnapshot.data() ?? {};
+    } else {
+      return {};
+    }
+  } catch (e) {
+    throw e;
+  }
+}
+
+
+  Widget userDataWidget(String label, String value) {
+  return Padding(
+    padding: EdgeInsets.all(12.0),
+    child: Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text('$label: ', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(value),
+        ],
+      ),
+    ),
+  );
+}
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: UserDataScreen(),
+  ));
 }

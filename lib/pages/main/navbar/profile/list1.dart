@@ -83,7 +83,7 @@ class _UserProfileState extends State<UserProfile> {
                       height: screenHeight/12.8,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Center(child: Text(data["birthdate"].toString())),
+                        child: Center(child: Text(data['birthdate'].toString())),
                       ),)
                   ],
                 )

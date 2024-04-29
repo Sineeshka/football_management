@@ -4,6 +4,7 @@ import 'package:sample/models/user.dart';
 import 'package:sample/pages/main/createTeam.dart';
 import 'package:sample/pages/main/navbar/homepage.dart';
 import 'package:sample/pages/main/navbar/add.dart';
+import 'package:sample/pages/main/navbar/tempprofile.dart';
 import 'package:sample/pages/main/tournament_reg.dart';
 import 'package:sample/pages/register.dart';
 import 'package:sample/pages/register.dart';
@@ -30,7 +31,7 @@ class Wrapper extends StatelessWidget {
         '/add': (context) => Add(),
         '/tournament':(context) => CreateEventPage(),
         '/addteam':(context) => AddTeamPage(),
-        // '/profile': (context) => Profile(),
+         '/teamprofile': (context) => temp(),
         // '/edit': (context) => Edit(),
         // '/replies': (context) => Replies()
       },

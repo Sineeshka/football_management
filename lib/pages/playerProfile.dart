@@ -205,9 +205,9 @@ class playerProfile extends StatelessWidget {
                   itemBuilder: (ctx, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        title: Text("hello $index"),
-                      ),
+                       child: ListTile(
+                      //    title: Text("hello $index"),
+                       ),
                     );
                   },
                   separatorBuilder: (ctx, index) {

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 // import 'package:king/screens/main/image.dart';
 // import 'package:king/screens/main/tournament.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,6 +28,10 @@ class _CreateEventPageState extends State<CreateEventPage> {
 
   FilePickerResult? _filePickerResult;
   bool _isInPersonEvent = true;
+  TextStyle mine = GoogleFonts.epilogue(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white);
+                TextStyle mine1 = GoogleFonts.epilogue(
+                fontSize: 16, fontWeight: FontWeight.normal, color: Color.fromARGB(255,101,75,78),);
 
   final TournamentService save = TournamentService();
   final String id = FirebaseAuth.instance.currentUser!.uid;
@@ -95,7 +100,14 @@ class _CreateEventPageState extends State<CreateEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leading: GestureDetector(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
+        backgroundColor: Color.fromARGB(255,101,75,78),
+        title: Text('Create Team',style: GoogleFonts.epilogue(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                leading: GestureDetector(
         onTap: () => Navigator.pop(context),
         child: Icon(Icons.arrow_back_ios)),
         ),
@@ -105,7 +117,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
           // SizedBox(
           //   height: 50,
           // ),
-          CustomHeadText(text: "Create Tournament"),
+          //CustomHeadText(text: "Create Tournament"),
           SizedBox(
             height: 25,
           ),
@@ -114,7 +126,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
            child: Container(width: double.infinity,
             height: MediaQuery.of(context).size.height*.3,
             decoration: BoxDecoration(
-            color: Colors.yellow,borderRadius: BorderRadius.circular(8) ),
+            color: Color.fromARGB(255,101,75,78),borderRadius: BorderRadius.circular(8) ),
             child: _filePickerResult!=null?
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
@@ -123,9 +135,9 @@ class _CreateEventPageState extends State<CreateEventPage> {
             ):
              Column(mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.add_a_photo_outlined,size:42,color: Colors.black,),
+              Icon(Icons.add_a_photo_outlined,size:42,color: Color.fromARGB(255,230, 220, 221)),
               SizedBox(height: 8,),
-              Text("Add Tournament Image",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w600),)
+              Text("Add Tournament Image",style: TextStyle(color: Color.fromARGB(255,230, 220, 221),fontWeight: FontWeight.w600),)
             ]),
           ),
           ),
@@ -162,19 +174,25 @@ class _CreateEventPageState extends State<CreateEventPage> {
               height: 8,
             ),
             SizedBox(
-              height: 8,
+              height: 2,
             ),
             SizedBox(
               height: 50,
               width: double.infinity,
             
-           child: MaterialButton(
-              color: Colors.blueGrey,
-              onPressed: (){
+           child: GestureDetector(
+            onTap: (){
                 save.createtournament(nameController.text,descController.text, locationController.text,dateTimeController.text,id);
                 Navigator.pop(context);
               },
-            child: Text("Create New One",style: TextStyle(color: Colors.black,fontSize: 20),),)
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(child: Text("Create New One",style: mine))
+              ),
+           ),
             ),
         ]),
         ),
